@@ -4,7 +4,7 @@
 
 Mal is a Clojure inspired Lisp interpreter.
 
-Mal is implemented in 29 different languages:
+Mal is implemented in 34 different languages:
 
 * Bash shell
 * C
@@ -12,11 +12,16 @@ Mal is implemented in 29 different languages:
 * C#
 * Clojure
 * CoffeeScript
+* Erlang
+* Factor
 * Forth
 * Go
+* Groovy
+* GNU Guile
 * Haskell
 * Java
-* Javascript ([Online Demo](http://kanaka.github.io/mal))
+* JavaScript ([Online Demo](http://kanaka.github.io/mal))
+* Julia
 * Lua
 * GNU Make
 * mal itself
@@ -134,6 +139,32 @@ cd coffee
 coffee ./stepX_YYY
 ```
 
+### Erlang
+
+*The Erlang implementation was created by [Nathan Fiedler (nlfiedler)](https://github.com/nlfiedler)*
+
+The Erlang implementation of mal requires [Erlang/OTP R17](http://www.erlang.org/download.html) and [rebar](https://github.com/rebar/rebar) to build.
+
+```
+cd erlang
+make
+    # OR
+MAL_STEP=stepX_YYY rebar compile escriptize # build individual step
+./stepX_YYY
+```
+
+### Factor
+
+*The Factor implementation was created by [Jordan Lewis (jordanlewis)](https://github.com/jordanlewis)*
+
+The Factor implementation of mal has been tested with Factor 0.97
+([factorcode.org](factorcode.org)).
+
+```
+cd factor
+FACTOR_ROOTS=src factor -run=stepX_YYY
+```
+
 ### Forth
 
 *The Forth implementation was created by [Chris Houser (chouser)](https://github.com/chouser)*
@@ -143,15 +174,36 @@ cd forth
 gforth stepX_YYY.fs
 ```
 
+### GNU Guile 2.1+
+
+*The Guile implementation was created by [Mu Lei (NalaGinrut)](https://github.com/NalaGinrut).*
+
+```
+cd guile
+guile -L ./ stepX_YYY.scm
+```
+
 ### Go
 
-You Go implementation of mal requires that go is installed on on the
+The Go implementation of mal requires that go is installed on on the
 path. The implementation has been tested with Go 1.3.1.
 
 ```
 cd go
 make
 ./stepX_YYY
+```
+
+
+### Groovy
+
+The Groovy implementation of mal requires Groovy to run and has been
+tested with Groovy 1.8.6.
+
+```
+cd groovy
+make
+groovy ./stepX_YYY.groovy
 ```
 
 
@@ -181,12 +233,21 @@ mvn -quiet exec:java -Dexec.mainClass=mal.stepX_YYY
 mvn -quiet exec:java -Dexec.mainClass=mal.stepX_YYY -Dexec.args="CMDLINE_ARGS"
 ```
 
-### Javascript/Node
+### JavaScript/Node
 
 ```
 cd js
 npm update
 node stepX_YYY.js
+```
+
+### Julia
+
+The Julia implementation of mal has been tested with Julia 0.3.7.
+
+```
+cd julia
+julia stepX_YYY.jl
 ```
 
 ### Lua
@@ -219,12 +280,11 @@ cd make
 make -f stepX_YYY.mk
 ```
 
-### Nim 0.10.3
+### Nim 0.11.0
 
 *The Nim implementation was created by [Dennis Felsing (def-)](https://github.com/def-)*
 
-Running the Nim implementation of mal requires Nim's current devel branch
-(0.10.3) or later, and the nre library installed.
+Running the Nim implementation of mal requires Nim 0.11.0 or later.
 
 ```
 cd nim
@@ -365,8 +425,8 @@ scala -classpath target/scala*/classes stepX_YYY
 
 *The Swift implementation was created by [Keith Rollin](https://github.com/keith-rollin)*
 
-The Swift implemenation of mal requires the Swift compiler (XCode) to
-build.
+The Swift implemenation of mal requires the Swift 1.2 compiler (XCode
+6.3) to build.
 
 ```
 cd swift

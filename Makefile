@@ -10,9 +10,9 @@ PYTHON = python
 # Settings
 #
 
-IMPLS = bash c clojure coffee cpp cs forth go haskell java julia js \
-	lua make mal ocaml matlab miniMAL nim perl php ps python \
-	r racket ruby rust scala swift vb
+IMPLS = bash c clojure coffee cpp cs erlang factor forth go groovy \
+	haskell java julia js lua make mal ocaml matlab miniMAL nim \
+	perl php ps python r racket ruby rust scala swift vb guile
 
 step0 = step0_repl
 step1 = step1_read_print
@@ -30,6 +30,7 @@ EXCLUDE_TESTS += test^bash^step5 # no stack exhaustion or completion
 EXCLUDE_TESTS += test^c^step5    # segfault
 EXCLUDE_TESTS += test^cpp^step5  # completes at 10,000
 EXCLUDE_TESTS += test^cs^step5   # fatal stack overflow fault
+EXCLUDE_TESTS += test^erlang^step5 # erlang is TCO, test passes
 EXCLUDE_TESTS += test^haskell^step5 # test completes
 EXCLUDE_TESTS += test^make^step5 # no TCO capability/step
 EXCLUDE_TESTS += test^mal^step5  # no TCO capability/step
@@ -57,8 +58,11 @@ clojure_STEP_TO_PROG = clojure/src/$($(1)).clj
 coffee_STEP_TO_PROG =  coffee/$($(1)).coffee
 cpp_STEP_TO_PROG =     cpp/$($(1))
 cs_STEP_TO_PROG =      cs/$($(1)).exe
+erlang_STEP_TO_PROG =  erlang/$($(1))
+factor_STEP_TO_PROG =  factor/src/$($(1))/$($(1)).factor
 forth_STEP_TO_PROG =   forth/$($(1)).fs
 go_STEP_TO_PROG =      go/$($(1))
+groovy_STEP_TO_PROG =  groovy/$($(1)).groovy
 java_STEP_TO_PROG =    java/src/main/java/mal/$($(1)).java
 haskell_STEP_TO_PROG = haskell/$($(1))
 julia_STEP_TO_PROG =   julia/$($(1)).jl
@@ -81,11 +85,13 @@ rust_STEP_TO_PROG =    rust/target/release/$($(1))
 scala_STEP_TO_PROG =   scala/$($(1)).scala
 swift_STEP_TO_PROG =   swift/$($(1))
 vb_STEP_TO_PROG =      vb/$($(1)).exe
+guile_STEP_TO_PROG =   guile/$($(1)).scm
 
 # Needed some argument munging
 COMMA = ,
 noop =
 SPACE = $(noop) $(noop)
+export FACTOR_ROOTS := src
 
 bash_RUNSTEP =    bash ../$(2) $(3)
 c_RUNSTEP =       ../$(2) $(3)
@@ -93,8 +99,11 @@ clojure_RUNSTEP = lein with-profile +$(1) trampoline run $(3)
 coffee_RUNSTEP =  coffee ../$(2) $(3)
 cpp_RUNSTEP =     ../$(2) $(3)
 cs_RUNSTEP =      mono ../$(2) --raw $(3)
+erlang_RUNSTEP =  ../$(2) $(3)
+factor_RUNSTEP =  factor ../$(2) $(3)
 forth_RUNSTEP =   gforth ../$(2) $(3)
 go_RUNSTEP =      ../$(2) $(3)
+groovy_RUNSTEP =  groovy ../$(2) $(3)
 haskell_RUNSTEP = ../$(2) $(3)
 java_RUNSTEP =    mvn -quiet exec:java -Dexec.mainClass="mal.$($(1))" $(if $(3), -Dexec.args="$(3)",)
 julia_RUNSTEP =   ../$(2) $(3)
@@ -118,6 +127,8 @@ rust_RUNSTEP =    ../$(2) $(3)
 scala_RUNSTEP =   sbt 'run-main $($(1))$(if $(3), $(3),)'
 swift_RUNSTEP =   ../$(2) $(3)
 vb_RUNSTEP =      mono ../$(2) --raw $(3)
+# needs TERM=dumb to work with readline
+guile_RUNSTEP =   guile -L ../guile ../$(2) $(3)
 
 # Extra options to pass to runtest.py
 mal_TEST_OPTS = --start-timeout 60 --test-timeout 120
@@ -208,4 +219,3 @@ $(IMPL_PERF):
           $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf2.mal); \
 	  echo 'Running: $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf3.mal)'; \
           $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf3.mal))
-

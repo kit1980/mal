@@ -25,6 +25,9 @@ cs/*.dll
 cs/*.mdb
 clojure/target
 clojure/.lein-repl-history
+erlang/ebin
+erlang/.rebar
+erlang/src/*.beam
 go/step*
 go/mal
 java/target/
@@ -53,3 +56,4 @@ nim/nimcache
 .m2
 .ivy2
 .sbt
+groovy/*.class
